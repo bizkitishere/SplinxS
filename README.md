@@ -1,1 +1,1 @@
-# SplinxS
+# Splinxs
