@@ -1,343 +1,359 @@
 <!DOCTYPE HTML> 
 <html>
-<head>
-	<meta charset="UTF-8">
-	<title>SplinxS Guide</title>
-	<link rel="icon" href="resources/images/logo.png" type="image/gif">
-	<link rel="stylesheet" type="text/css" href="resources/css/style.css">
-	<link rel="stylesheet" type="text/css" href="resources/css/bootstrap.min.css">
-	<script src="resources/js/jquery-2.2.0.min.js"></script>
-	<script src="resources/js/rmc3@3.2.95.js"></script>
-	<!-- socket.io for signaling -->
-    <script src="/socket.io/socket.io.js"></script>
-	<script src="resources/js/bootstrap.min.js"></script>
-	<script src="resources/js/util.js"></script>
-	<script>
-		var connection = new RTCMultiConnection();
-		
-		var defaultName = "anonymous";
-		var peerName = defaultName;
-		var username = "guide1";
-		
-		var channel = "myGuideChannel1";
-		
-		var peer;
-		
-		//only for testing
-		//connection.socketURL = 'https://rtcmulticonnection.herokuapp.com:443/';
-		connection.socketURL = '/';
-		
-		/*
-		connection.session = { 
-			data: true,
-			audio: true,
-			oneway: true
-		}
-		*/
-		
-		connection.session = { 
-			data: true
-			,audio: true
-		};
-		
-		
-		//connection.dontCaptureUserMedia = true;
-		
-		connection.sdpConstraints.mandatory = {
-			OfferToReceiveAudio: true,
-			OfferToReceiveVideo: false
-		};
-		
-		
-		connection.extra = {
-			username: username
-		};
+    <head>
+        <meta charset="UTF-8">
+        <title>Splinxs Guide</title>
+        <link rel="icon" href="resources/images/logo.png" type="image/gif">
+        <link rel="stylesheet" type="text/css" href="resources/css/style.css">
+        <link rel="stylesheet" type="text/css" href="resources/css/bootstrap.min.css">
+        <script src="resources/js/jquery-2.2.0.min.js"></script>
+        <script src="resources/js/rmc3@3.2.95.js"></script>
+        <!-- socket.io for signaling -->
+        <script src="/socket.io/socket.io.js"></script>
+        <script src="resources/js/bootstrap.min.js"></script>
+        <script src="resources/js/connection.js"></script>
+        <script src="resources/js/guide.connection.js"></script>
+        <script src="resources/js/util.js"></script>
+        <script src="resources/js/ui.js"></script>
+        <script src="resources/js/DetectRTC.js"></script>
+        <script>
+            //var connection = new RTCMultiConnection();
 
-		connection.channel = channel;
-		
-		/*
-		if(typeof webkitMediaStream !== 'undefined') {
-                connection.attachStreams.push(new webkitMediaStream());
-            }
-            else if(typeof MediaStream !== 'undefined'){
-                connection.attachStreams.push(new MediaStream());
-            }
-            else {
-                console.error('Neither Chrome nor Firefox. This demo may NOT work.');
-        }
-		
-		connection.dontCaptureUserMedia = true;
+            //var defaultName = "anonymous";
+            //var peerName = defaultName;
+            //var username = "guide1";
+
+            //var channel = "myGuideChannel1";
+
+            var peer;
+
+            //only for testing
+            //connection.socketURL = 'https://rtcmulticonnection.herokuapp.com:443/';
+            
+            //connection.socketURL = '/';
+
+            /*
+             connection.session = { 
+             data: true,
+             audio: true,
+             oneway: true
+             }
+             */
+            
+            /*
             connection.session = {
-                data: true,
-                audio: true
-        };
-		*/
-		
-		
-		//open room for this guide
-		connection.open(channel);
+                data: true
+                , audio: true
+            };
+            */
 
-		
-		connection.onNewSession = function (session) {
-			console.log('new session');
-			debugger;
-		};
-		
-		
-		connection.onconnected = function (event){
-			console.log('connected');
-			debugger;
-		};
-		
-		connection.onopen = function(event) {
-			console.log('connection opened');
-			
-			if(connection.alreadyOpened) return;
-            connection.alreadyOpened = true;
+            //connection.dontCaptureUserMedia = true;
 
-			sendUsername(username);
-			
-			peerName = event.extra.username;
-			showChat();
-			
-			if(connection.peers.getLength() > 0){
-				peer = connection.peers.selectFirst().peer;
-			}
-			
-			peer.onaddstream = function(event) {
-				console.log('peer added stream');
-				
-				debugger;
-			}
-			
-		};
-		
-		connection.onstreamid = function (e) {
-			console.log('onstreamId');
-			debugger;
-		}
-		
-		connection.onaddstream = function (e) {
-			console.log('onaddstream');
-			debugger;
-		}
-		
-		connection.onstream = function(event) {
-			console.log('stream started');
+            /*
+            connection.sdpConstraints.mandatory = {
+                OfferToReceiveAudio: false,
+                OfferToReceiveVideo: false
+            };
+            */
+            
+            /*
+            connection.extra = {
+                username: username
+            };
+            */
 
-			/*
-			if(!event.stream.getAudioTracks().length && !event.stream.getVideoTracks().length) {
-				console.log('received empty stream');
-				debugger;
-                return;
+            //connection.channel = channel;
+
+            /*
+             if(typeof webkitMediaStream !== 'undefined') {
+             connection.attachStreams.push(new webkitMediaStream());
+             }
+             else if(typeof MediaStream !== 'undefined'){
+             connection.attachStreams.push(new MediaStream());
+             }
+             else {
+             console.error('Neither Chrome nor Firefox. This demo may NOT work.');
+             }
+             
+             connection.dontCaptureUserMedia = true;
+             connection.session = {
+             data: true,
+             audio: true
+             };
+             */
+
+
+            //open room for this guide
+            //connection.open(channel);
+
+
+            connection.onNewSession = function (session) {
+                console.log('new session');
+                debugger;
+            };
+
+
+            connection.onconnected = function (event) {
+                console.log('connected');
+                debugger;
+            };
+            
+            /*
+            connection.onopen = function (event) {
+                console.log('connection opened');
+
+                if (connection.alreadyOpened)
+                    return;
+                connection.alreadyOpened = true;
+
+                sendUsername(username);
+
+                peerName = event.extra.username;
+                showChat();
+
+                if (connection.peers.getLength() > 0) {
+                    peer = connection.peers.selectFirst().peer;
+                }
+
+                peer.onaddstream = function (event) {
+                    console.log('peer added stream');
+
+                    debugger;
+                }
+
+            };
+            */
+
+            connection.onstreamid = function (e) {
+                console.log('onstreamId');
+                debugger;
             }
-			*/
 
-			
-			if(event.stream.type == "local"){
-				console.log('own stream');
-				//$("#myVideo").append(event.mediaElement);
-			}else if(event.stream.type == "remote"){
-				console.log('remote stream');
-				//connection.videosContainer.append(event.mediaElement);
-				$("#videoContainer").append(event.mediaElement);
-				
-				peer;
-				
-				var a = $("#videoContainer");
-				
-			}
-			
-            //connection.videosContainer.append(event.mediaElement);
+            connection.onaddstream = function (e) {
+                console.log('onaddstream');
+                debugger;
+            }
 
-		};
-		
-		connection.onstreamended = function(event) {
-			console.log('stream ended');
-			$("#videoContainer").empty();
-			
-			connection.attachStreams.forEach(function(stream) {
-				stream.stop();
-			});
-		}
-		
-		connection.onmessage = function(message){
-			console.log('message arrived');
-			if(message.data.typing){
-				console.log('peer is typing');
-				peerIsTyping($("#spn_isTyping"), peerName);
-				return;
-			}
-			if(message.data.stoppedTyping){
-				console.log('peer stopped typing');
-				peerStoppedTyping($("#spn_isTyping"));
-				return
-			}
+            connection.onstream = function (event) {
+                console.log('stream started');
 
-			console.log('message: ' + message.data);
-			//play message sound
-			playSound(sounds.message_arrival);
-			appendPeerMessageToChat(message.data, peerName);
-			vibrate();
-		};
-		
-		connection.onclose = function(event){
-			console.log('close');
-			debugger;
-		};
-		
-		connection.onerror = function(error){
-			console.log('error');
-			debugger;
-		};
+                /*
+                 if(!event.stream.getAudioTracks().length && !event.stream.getVideoTracks().length) {
+                 console.log('received empty stream');
+                 debugger;
+                 return;
+                 }
+                 */
 
-		connection.onRequest = function(request) {
-			console.log('connection request');
-			debugger;
-			//connection.accept(request);
-		};
-		
-		
-		
-		$(document).ready(function() {
-			
-			initSplinxS();
-			connection.videosContainer = $("#videoContainer");
-			
-			
-			$("#btn_chat").click(function(){
-				console.log('send chat clicked');
-				sendMessage();
-			});
-			
-			$("#inp_chat").keypress(function(e){
-				//send message when enter key is pressed
-				if(e.which == 13){
-					console.log('enter on chat input');
-					sendMessage();
-				}
-			});
 
-			$("#inp_chat").keyup(function(e){
-				console.log('chat input lost focus');
-				meIsTyping();
-			});
-			
-			$("#btn_stopVideo").click(function(e){
-				console.log('stop video clicked');
-				stopVideo();
-			});
-			
-			$("#btn_minimiseChat").click(function(e){
-				console.log('minimise chat');
-				changeToSmallChat();
-			});
-			
-			$("#smallChat").click(function(e){
-				console.log('maximising chat');
-				changeToChat();
-			});
-			
-			$("#btn_closeConnection").click(function(e){
-				console.log('closing connection');
-				closeConnection();
-			});
-			
-			
-		});
-		
-		
-		//helper function to send a message
-		//also empties the input
-		function sendMessage(){
-				var chatInput = $("#inp_chat");
-				var message = chatInput.val();
-				if($.trim(message).length > 0){
-					sendMessageToPeer(message, peerName);
-				}
-				chatInput.val("");
-			}
-		
-		function stopVideo(){
-			var a = connection.attachStreams;
-			
-			var b = a[0];
+                if (event.stream.type == "local") {
+                    console.log('own stream');
+                    //$("#myVideo").append(event.mediaElement);
+                } else if (event.stream.type == "remote") {
+                    console.log('remote stream');
+                    //connection.videosContainer.append(event.mediaElement);
+                    $("#videoContainer").append(event.mediaElement);
 
-			b.stop();
-			
-			$("#videoContainer").empty();
-			
-			connection.attachStreams.forEach(function(stream) {
-				stream.stop();
-			});
-			
-		}
-		
-		function closeConnection(){
-			connection.close();
-			connection.attachStreams.forEach(function(stream) {
-				stream.stop();
-			});
-		}
-		
-	</script>
-</head>
-<body>
-	<header>
-	<div class="topbar">
-		<div class="topbar-left"></div>
-		<div class="topbar-middle"></div>
-		<div class="topbar-right"></div>
-	</div>
-	Welcome Guide
-	</header>
-    <br />
-	<button type="button" id="btn_closeConnection">close connection</button>
-	<div id="video" class="video">
-		<!--<button type="button" id="btn_shareVideo">share video</button>-->
-		<button type="button" id="btn_stopVideo">stop video</button>
-		<div id="videoContainer" ></div>
-	</div>
-	<div class="container" id="chatBox" hidden="true">
-		<div class="row">
-			<!--<div class="col-md-5">-->
-				<div class="panel panel-primary">
-					<div class="panel-heading">
-						<span class="glyphicon glyphicon-comment"></span> Chat <span id="spn_isTyping" class="text-center"></span>
-						<div class="btn-group pull-right">
-							<button id="btn_minimiseChat" type="button" class="btn btn-default btn-xs" >
-								<span class="glyphicon glyphicon-chevron-down"></span>
-							</button>
-							<ul class="dropdown-menu slidedown">
-								<li><a href="#"><span class="glyphicon glyphicon-refresh">
-								</span>Refresh</a></li>
-								<li><a href="#"><span class="glyphicon glyphicon-ok-sign">
-								</span>Available</a></li>
-							</ul>
-						</div>
-					</div>
-					<div class="panel-body">
-						<ul class="chat" id="chat">
-						</ul>
-					</div>
-					<div class="panel-footer">
-						<div class="input-group">
-							<input id="inp_chat" type="text" class="form-control input-sm" placeholder="Type your message here...">
-							<span class="input-group-btn">
-								<button class="btn btn-warning btn-sm" id="btn_chat">Send</button>
-							</span>
-						</div>
-					</div>
-				</div>
-			<!--</div>-->
-		</div>
-	</div>
-	<audio id="audioPlayer"></audio>
-	<footer>
-		<div id="smallChat" class="smallChat" hidden>
-			<img id="smallChatImg" class="smallChatImg" src="resources/images/smallChat.png" alt="chat small">
-			<span id="smallChatText" class="smallChatText">Chat</span>
-		</div>
-	</footer>
-</body>
+                    peer;
+
+                    var a = $("#videoContainer");
+
+                }
+
+                //connection.videosContainer.append(event.mediaElement);
+
+            };
+
+            connection.onstreamended = function (event) {
+                console.log('stream ended');
+                $("#videoContainer").empty();
+
+                connection.attachStreams.forEach(function (stream) {
+                    stream.stop();
+                });
+            }
+            
+            /*
+            connection.onmessage = function (message) {
+                console.log('message arrived');
+                if (message.data.typing) {
+                    console.log('peer is typing');
+                    peerIsTyping(peerName);
+                    return;
+                }
+                if (message.data.stoppedTyping) {
+                    console.log('peer stopped typing');
+                    peerStoppedTyping();
+                    return;
+                }
+
+                console.log('message: ' + message.data);
+                //play message sound
+                playSound(sounds.message_arrival);
+                appendPeerMessageToChat(message.data, peerName);
+                vibrate();
+            };
+            */
+            connection.onclose = function (event) {
+                console.log('close');
+                debugger;
+            };
+
+            connection.onerror = function (error) {
+                console.log('error');
+                debugger;
+            };
+
+            connection.onRequest = function (request) {
+                console.log('connection request');
+                debugger;
+                //connection.accept(request);
+            };
+
+
+
+            $(document).ready(function () {
+
+                initSplinxS();
+                initUI();
+                
+                if(connectionState.Media == connectionStates.Media.None){
+                    showChat();
+                }
+                
+                connection.videosContainer = $("#videoContainer");
+
+
+                $("#btn_chat").click(function () {
+                    console.log('send chat clicked');
+                    var chatInput = $("#inp_chat");
+                    var message = chatInput.val();
+                    sendMessageToPeer(message, true);
+                    chatInput.val("");
+                });
+
+                $("#inp_chat").keypress(function (e) {
+                    //send message when enter key is pressed
+                    if (e.which == 13) {
+                        console.log('enter on chat input');
+                        var chatInput = $("#inp_chat");
+                        var message = chatInput.val();
+                        sendMessageToPeer(message, true);
+                        chatInput.val("");
+                    }
+                });
+
+                $("#inp_chat").keyup(function (e) {
+                    console.log('chat input lost focus');
+                    meIsTyping();
+                });
+
+                $("#btn_stopVideo").click(function (e) {
+                    console.log('stop video clicked');
+                    stopVideo();
+                });
+
+                $("#btn_minimiseChat").click(function (e) {
+                    console.log('minimise chat');
+                    changeToSmallChat();
+                });
+
+                $("#smallChat").click(function (e) {
+                    console.log('maximising chat');
+                    changeToChat();
+                });
+
+                $("#btn_closeConnection").click(function (e) {
+                    console.log('closing connection');
+                    closeConnection();
+                });
+
+
+            });
+
+            /*
+            //helper function to send a message
+            //also empties the input
+            function sendMessage(message) {                
+                if ($.trim(message).length > 0) {
+                    sendMessageToPeer(message, true);
+                }
+            }
+            */
+            
+            function stopVideo() {
+                var a = connection.attachStreams;
+
+                var b = a[0];
+
+                b.stop();
+
+                $("#videoContainer").empty();
+
+                connection.attachStreams.forEach(function (stream) {
+                    stream.stop();
+                });
+
+            }
+
+        </script>
+    </head>
+    <body>
+        <header>
+            <div class="topbar">
+                <div class="topbar-left"></div>
+                <div class="topbar-middle"></div>
+                <div class="topbar-right"></div>
+            </div>
+            Welcome Guide
+        </header>
+        <br />
+        <button type="button" id="btn_closeConnection">close connection</button>
+        <div id="video" class="video">
+            <!--<button type="button" id="btn_shareVideo">share video</button>-->
+            <button type="button" id="btn_stopVideo">stop video</button>
+            <div id="videoContainer" ></div>
+        </div>
+        <div class="container" id="chatBox" hidden>
+            <div class="row">
+                <!--<div class="col-md-5">-->
+                <div class="panel panel-primary">
+                    <div class="panel-heading">
+                        <span class="glyphicon glyphicon-comment"></span> Chat <span id="spn_isTyping" class="text-center"></span>
+                        <div class="btn-group pull-right">
+                            <button id="btn_minimiseChat" type="button" class="btn btn-default btn-xs" >
+                                <span class="glyphicon glyphicon-chevron-down"></span>
+                            </button>
+                            <ul class="dropdown-menu slidedown">
+                                <li><a href="#"><span class="glyphicon glyphicon-refresh">
+                                        </span>Refresh</a></li>
+                                <li><a href="#"><span class="glyphicon glyphicon-ok-sign">
+                                        </span>Available</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="panel-body">
+                        <ul class="chat" id="chat">
+                        </ul>
+                    </div>
+                    <div class="panel-footer">
+                        <div class="input-group">
+                            <input id="inp_chat" type="text" class="form-control input-sm" placeholder="Type your message here...">
+                            <span class="input-group-btn">
+                                <button class="btn btn-warning btn-sm" id="btn_chat">Send</button>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+                <!--</div>-->
+            </div>
+        </div>
+        <audio id="audioPlayer"></audio>
+        <footer>
+            <div id="smallChat" class="smallChat" hidden>
+                <img id="smallChatImg" class="smallChatImg" src="resources/images/smallChat.png" alt="chat small">
+                <span id="smallChatText" class="smallChatText">Chat</span>
+            </div>
+        </footer>
+    </body>
 </html>
