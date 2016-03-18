@@ -1,89 +1,89 @@
 html {
-	height: 100%;
-	width: 100%;
-	margin: 0px;
-	padding: 0px;
+    height: 100%;
+    width: 100%;
+    margin: 0px;
+    padding: 0px;
 }
 
 body {
-	height: 100%;
-	width: 100%;
+    height: 100%;
+    width: 100%;
 }
 header{
-	width: 100%;
-	height: 10%;
+    width: 100%;
+    height: 10%;
 }
 .guideLink {
-	font-size: 20px;
-	color: #222222;
+    font-size: 20px;
+    color: #222222;
 }
 
 .touristLink {
-	font-size: 50px;
-	color: #BBBBBB;
+    font-size: 50px;
+    color: #BBBBBB;
 }
 
 .errorSection {
-	font-size: 100px;
-	color: #FF0000;
+    font-size: 100px;
+    color: #FF0000;
 }
 
 /*topbar*/
 .topbar {
-	width: 100%;
+    width: 100%;
 }
 .topbar-left::before{
-   content: "\200B"; /*zero-width space*/
+    content: "\200B"; /*zero-width space*/
 }
 .topbar-left {
-	width: calc(100% / 3);
-	background: #2585C4;
-	float: left;
+    width: calc(100% / 3);
+    background: #2585C4;
+    float: left;
 }
 .topbar-middle::before{
-   content: "\200B";
+    content: "\200B";
 }
 .topbar-middle {
-	width: calc(100% / 3);
-	background: #31C6C7;
-	float: left;
+    width: calc(100% / 3);
+    background: #31C6C7;
+    float: left;
 }
 .topbar-right::before{
-   content: "\200B";
+    content: "\200B";
 }
 .topbar-right {
-	width: calc(100% / 3);
-	background: #28B294;
-	float: left;
+    width: calc(100% / 3);
+    background: #28B294;
+    float: left;
 }
 /*topbar*/
 
 /*footer*/
 footer {
-	position: absolute;
-	width: 100%;
-	bottom: 0px;
+    position: absolute;
+    width: 100%;
+    bottom: 0px;
 }
 /*small chat*/
 .smallChat {
-	background: #2585C4;
-	width: 15%;
-	min-width: 250px;
-	min-height: 41px;
-	float: right;
+    background: #2585C4;
+    width: 15%;
+    min-width: 250px;
+    min-height: 41px;
+    float: right;
 }
 .smallChat:hover {
-	cursor:pointer
+    cursor:pointer
 }
 
 .smallChatImg {
-	padding: 5px;
+    padding: 5px;
 }
 
 .smallChatText {
-	font-size: 25px;
-	vertical-align: middle;
-	color: #F3F3F4;
+    font-size: 25px;
+    vertical-align: middle;
+    color: #F3F3F4;
 }
 /*small chat*/
 /*footer*/
@@ -92,30 +92,30 @@ footer {
 /*
 #myVideo
 {
-	transform: rotateY(180deg);
-	-webkit-transform:rotateY(180deg); /* Safari and Chrome */
+        transform: rotateY(180deg);
+        -webkit-transform:rotateY(180deg); /* Safari and Chrome */
 /*	-moz-transform:rotateY(180deg); /* Firefox */
 /*
 }
 */
 
 .video {
-	width: 30%;
-	height: 30%;
-	float: left;
+    width: 30%;
+    height: 30%;
+    float: left;
 }
 
 /* chatbox*/
 
 
 #chatBox {
-	margin-top: 0px;
-	margin-bottom: 0px;
-	margin-right: 0px;
-	padding-bottom: 0px;
-	padding-top: 0px;
-	width: 15%;
-	min-width: 250px;
+    margin-top: 0px;
+    margin-bottom: 0px;
+    margin-right: 0px;
+    padding-bottom: 0px;
+    padding-top: 0px;
+    width: 15%;
+    min-width: 250px;
 }
 
 .chat
@@ -182,88 +182,88 @@ footer {
 /*loading animation*/
 
 .load {
-	width: 100%;
-	height: 50%;
-	margin: auto;
-	text-align: center;
+    width: 100%;
+    height: 50%;
+    margin: auto;
+    text-align: center;
 }
 .loadDot {
-	width: calc(100vw / 7);
-	height: calc(100vw / 7);
-	float: left;
-	margin-left: calc(100vw / 7);
+    width: calc(100vw / 7);
+    height: calc(100vw / 7);
+    float: left;
+    margin-left: calc(100vw / 7);
 }
 
 #load-1::before{
-   content: "\200B";
+    content: "\200B";
 }
 #load1 {
-	background: #2585C4;
-	animation: loadAnimation 3s linear infinite;
+    background: #2585C4;
+    animation: loadAnimation 3s linear infinite;
 }
 #load-2::before{
-   content: "\200B";
+    content: "\200B";
 }
 #load2 {
-	animation: loadAnimation 3s linear infinite;
-	animation-delay: 1s;
-	background: #31C6C7;
+    animation: loadAnimation 3s linear infinite;
+    animation-delay: 1s;
+    background: #31C6C7;
 }
 #load-3::before{
-   content: "\200B";
+    content: "\200B";
 }
 #load3 {
-	animation: loadAnimation 3s linear infinite;
-	animation-delay: 2s;
-	background: #28B294;
+    animation: loadAnimation 3s linear infinite;
+    animation-delay: 2s;
+    background: #28B294;
 }
 
 @keyframes loadAnimation {
-	0% {
-		opacity: 1;
-	}
-	35% {
-		opacity : 0.0;
-	}
-	100% {
-		opacity : 0.0;
-	}
+    0% {
+        opacity: 1;
+    }
+    35% {
+        opacity : 0.0;
+    }
+    100% {
+        opacity : 0.0;
+    }
 }
 
 @-webkit-keyframes loadAnimation {
-	0% {
-		opacity: 1;
-	}
-	35% {
-		opacity : 0.0;
-	}
-	100% {
-		opacity : 0.0;
-	}
+    0% {
+        opacity: 1;
+    }
+    35% {
+        opacity : 0.0;
+    }
+    100% {
+        opacity : 0.0;
+    }
 }
 
 @-moz-keyframes loadAnimation {
-	0% {
-		opacity: 1;
-	}
-	35% {
-		opacity : 0.0;
-	}
-	100% {
-		opacity : 0.0;
-	}
+    0% {
+        opacity: 1;
+    }
+    35% {
+        opacity : 0.0;
+    }
+    100% {
+        opacity : 0.0;
+    }
 }
 
 @-o--moz-keyframes loadAnimation {
-	0% {
-		opacity: 1;
-	}
-	35% {
-		opacity : 0.0;
-	}
-	100% {
-		opacity : 0.0;
-	}
+    0% {
+        opacity: 1;
+    }
+    35% {
+        opacity : 0.0;
+    }
+    100% {
+        opacity : 0.0;
+    }
 }
 
 /*loading animation*/
