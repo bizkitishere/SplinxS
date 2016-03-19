@@ -165,23 +165,20 @@
                 });
 
                 //e.mediaElement.parentNode.removeChild(e.mediaElement);
-            }
+            };
 
 
             $(document).ready(function () {
 
                 initSplinxS();
                 initUI();
-                
-                if(connectionState.Media == connectionStates.Media.None){
-                    showChat();
-                }
+                //showGUI();
                 
                 connection.videosContainer = $("#videoContainer");
 
                 $("#btn_joinConnection").click(function () {
                     console.log('joining connection');
-                    connection.join(channel);
+                    initConnectionWithGuide();
                 });
 
                 $("#btn_chat").click(function () {

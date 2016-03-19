@@ -25,39 +25,14 @@ connection.onopen = function (event) {
         return;
     connection.alreadyOpened = true;
 
-    sendUsername(username);
-    
-    showChat();
-    
-    /*
-     if (connection.peers.getLength() > 0) {
-     peer = connection.peers.selectFirst().peer;
-     }
-     */
 };
 
 connection.onmessage = function (message) {
-    if(!message.data){
-        console.log('no data in message');
+    if (!message.data) {
+        console.log('tourist empty sctp message');
         return;
     }
-
-    if (message.data.typing) {
-        peerIsTyping(peername);
-        return;
-    }
-    if (message.data.stoppedTyping) {
-        peerStoppedTyping();
-        return;
-    }
-    if (message.data.username) {
-        peername = message.data.username;
-        return;
-    }
-
-    console.log('message: ' + message.data);
-    debugger;
-    messageArrived(message.data);
+    onMessage(message.data);
 };
 
 /**
@@ -69,33 +44,79 @@ connection.connectSocket(function (socket) {
     console.log('tourist websoket connected');
     websocket = socket;
     
+    //send message to peer if I do not support sctp
+    /*
+    if(supportsOnlyWebsocket()){
+        sendUseWebsocketConnection();
+    }
+    console.log('tourist: will send username');
     sendUsername(username);
+    */
     
     // listen custom messages from server
     socket.on(connection.socketCustomEvent, function (message) {
-        //console.log('message arrived: ' + message.customMessage);
-
-        if(!message.customMessage){
-            console.log('tourist no custom message');
+        if (!message.customMessage) {
+            console.log('tourist empty websocket message');
             return;
         }
-        
-        if (message.customMessage.typing) {
-            console.log('tourist peer typing');
-            peerIsTyping(peername);
+        //message that peer only supports websockets
+        //=> I will only websockets too
+        if(message.customMessage.connection){
+            console.log('tourist: peer only supports websockets, will do the same');
+            connectionState.DataChannel = connectionStates.DataChannel.Websocket;
             return;
         }
-        if (message.customMessage.stoppedTyping) {
-            console.log('tourist peer stopped typing');
-            peerStoppedTyping();
-            return;
-        }
-        if (message.customMessage.username) {
-            console.log('tourist username: ' + message.customMessage.username);
-            peername = message.customMessage.username;
-            return;
-        }
-        
-        messageArrived(message.customMessage);
+        onMessage(message.customMessage);
     });
 });
+/**
+ * checks what kind of message arrived acts accordingly
+ * @param {String} message message sent by peer
+ */
+function onMessage(message) {
+    if (message.typing) {
+        console.log('guide peer typing');
+        peerIsTyping(peername);
+        return;
+    }
+    if (message.stoppedTyping) {
+        console.log('guide peer stopped typing');
+        peerStoppedTyping();
+        return;
+    }
+    if (message.username) {
+        console.log('tourist peername: ' + message.username);
+        
+        //send message to peer if I do not support sctp
+        /*
+        if(supportsOnlyWebsocket()){
+            sendUseWebsocketConnection();
+        }
+        */
+        
+        peername = message.username;
+        //tourist does not receive the username for some reason...
+        /*
+        if(!peername){
+            sendUsername(username);
+        }
+        */
+        
+        if(!supportsOnlyWebsocket()){
+            console.log('joining channel: ' + channel);
+            connection.join(channel);
+        }
+        showGUI();
+        return;
+    }
+
+    messageArrived(message);
+}
+
+function initConnectionWithGuide() {
+    if (supportsOnlyWebsocket()) {
+        sendUseWebsocketConnection();
+    }
+    sendUsername(username);
+    
+}

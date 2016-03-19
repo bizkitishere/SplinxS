@@ -161,3 +161,59 @@ function peerStoppedTyping() {
     console.log("stopped typing");
     isTypingSpan.text("");
 }
+/**
+ * displays all gui elements available for the current connection
+ */
+function showGUI(){
+    if(supportsOnlyWebsocket()){
+        showWebsocketOnlyGUI();
+    }else{
+        if(noMediaSupported()){
+            showNoMediaGUI();
+        }else{
+            if(supportsAudioVideo()){
+                showAudioVideoGUI();
+            }else{
+                if(supportsAudioOnly()){
+                    showAudioOnlyGUI();
+                } else if(supportsVideoOnly()){
+                    showVideoOnlyGUI();
+                }
+            }
+        }
+    }
+}
+/**
+ * will display the elements necessary for a websocket connection
+ */
+function showWebsocketOnlyGUI(){
+    showChat();
+    //TODO hide mic, video, etc.
+}
+/**
+ * will display the elements necessary for a connection with no media
+ */
+function showNoMediaGUI(){
+    showChat();
+    //TODO hide mic, video, etc.
+    //TODO peer might have media available
+}
+/**
+ * will display all gui elements for a Webrtc conection
+ */
+function showAudioVideoGUI(){
+    showChat();
+    //TODO show audio, video, etc.
+}
+/**
+ * will display only audio gui elements for a Webrtc conection
+ */
+function showAudioOnlyGUI(){
+    
+}
+/**
+ * will display onyl video gui elements for a Webrtc conection
+ */
+function showVideoOnlyGUI(){
+    
+}
