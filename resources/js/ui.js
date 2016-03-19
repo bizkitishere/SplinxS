@@ -204,16 +204,20 @@ function showNoMediaGUI(){
 function showAudioVideoGUI(){
     showChat();
     //TODO show audio, video, etc.
+    $("#video").show();
 }
 /**
  * will display only audio gui elements for a Webrtc conection
  */
 function showAudioOnlyGUI(){
-    
+    showChat();
+    //TODO show audio...
 }
 /**
  * will display onyl video gui elements for a Webrtc conection
  */
 function showVideoOnlyGUI(){
-    
+    showChat();
+    //TODO show video...
+    $("#video").show();
 }
