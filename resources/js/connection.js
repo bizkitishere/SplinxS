@@ -27,9 +27,25 @@ var username;
 var peername;
 
 /**
- * checks what Webrtc features are supported by the browser
+ * fires once the detect rtc script is ready
  */
 DetectRTC.load(function () {
+    detectRTCcapabilities();
+    
+});
+
+var connection = new RTCMultiConnection();
+connection.socketURL = '/';
+
+//TODO remove once other things work
+var channel = "myGuideChannel1";
+//TODO remove once other things work
+connection.channel = channel;
+
+/**
+ * checks the browser's capabilities and sets the connection state accordingly
+ */
+function detectRTCcapabilities(){
     if (DetectRTC.isSctpDataChannelsSupported) {
         connectionState.DataChannel = connectionStates.DataChannel.SCTP;
     } else {
@@ -50,15 +66,7 @@ DetectRTC.load(function () {
             }
         }
     }
-});
-
-var connection = new RTCMultiConnection();
-connection.socketURL = '/';
-
-//TODO remove once other things work
-var channel = "myGuideChannel1";
-//TODO remove once other things work
-connection.channel = channel;
+}
 
 /**
  * sends a message to the peer using either SCTP or Websocket
