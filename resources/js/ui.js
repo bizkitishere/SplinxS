@@ -20,6 +20,7 @@ var smallChatColors = {
  * !needs to be called in document.ready()!
  */
 function initUI(){
+    if (showLogs) console.log('init gui');
     chat = $("#chat");
     smallChat = $("#smallChat");
     chatBox = $("#chatBox");
@@ -189,6 +190,7 @@ function showGUI(){
 function showWebsocketOnlyGUI(){
     showChat();
     //TODO hide mic, video, etc.
+    $("#btn_closeConnection").show();
 }
 /**
  * will display the elements necessary for a connection with no media
@@ -197,6 +199,7 @@ function showNoMediaGUI(){
     showChat();
     //TODO hide mic, video, etc.
     //TODO peer might have media available
+    $("#btn_closeConnection").show();
 }
 /**
  * will display all gui elements for a Webrtc conection
@@ -205,6 +208,7 @@ function showAudioVideoGUI(){
     showChat();
     //TODO show audio, video, etc.
     $("#video").show();
+    $("#btn_closeConnection").show();
 }
 /**
  * will display only audio gui elements for a Webrtc conection
@@ -212,6 +216,7 @@ function showAudioVideoGUI(){
 function showAudioOnlyGUI(){
     showChat();
     //TODO show audio...
+    $("#btn_closeConnection").show();
 }
 /**
  * will display onyl video gui elements for a Webrtc conection
@@ -220,4 +225,5 @@ function showVideoOnlyGUI(){
     showChat();
     //TODO show video...
     $("#video").show();
+    $("#btn_closeConnection").show();
 }

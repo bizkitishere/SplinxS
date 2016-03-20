@@ -7,6 +7,7 @@
 //variables
 var audioPlayer;
 var sounds;
+var vibrations;
 var isTypingTimeout = null;
 var typingTimeout = 2000;
 
@@ -24,7 +25,13 @@ function initSplinxS() {
         call_dial: "",
         message_arrival: "resources/sounds/message/arrival.mp3"
     };
-
+    
+    vibrations = {
+        stop: 0,
+        message: 1,
+        connectionRequest: 2
+    };
+    
     navigator.vibrate = navigator.vibrate || navigator.webkitVibrate || navigator.mozVibrate || navigator.msVibrate;
 
 }
@@ -95,16 +102,35 @@ function stopSound() {
 }
 /**
  * causes the device to vibrate (if supported by the device)
- * uses a predefined pattern
+ * uses a predefined patternint
+ * @param {int} vibration which vibration pattern to use
  */
-function vibrate() {
+function vibrate(vibration) {
     if (navigator.vibrate) {
-        console.log('vibrating');
-        // vibration API supported
-        navigator.vibrate([150, 100, 100, 100, 150]); // intervall, pause, intervall, pause...
+        switch(vibration){
+            case vibrations.stop:
+                navigator.vibrate([0]);
+                break;
+            case vibrations.message:
+                navigator.vibrate([150, 100, 100, 100, 150]); // intervall, pause, intervall, pause...
+                break;
+            case vibrations.connectionRequest:
+                navigator.vibrate([
+                    300, 200, 300, 200, 300, 200, 300, 200, 300, 200,//2500ms
+                    300, 200, 300, 200, 300, 200, 300, 200, 300, 200, 
+                    300, 200, 300, 200, 300, 200, 300, 200, 300, 200, 
+                    300, 200, 300, 200, 300, 200, 300, 200, 300, 200]);
+                break;
+            default:
+                
+                break;
+        }
     }
 }
 
+function stopVibration(){
+    vibrate(vibrations.stop);
+}
 
 
 /**

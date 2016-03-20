@@ -5,6 +5,8 @@
  */
 
 //variables
+var showLogs = true;
+
 var connectionState = {
     DataChannel: {},
     Media: {}
@@ -22,6 +24,10 @@ var connectionStates = {
     }
 };
 var websocket;
+//timeout for connection request variable
+var conEstabTimeout = null; 
+//timeout for connection request
+var conEstabTimer = 10000; //milliseconds
 
 var username;
 var peername;
@@ -37,11 +43,6 @@ DetectRTC.load(function () {
 var connection = new RTCMultiConnection();
 connection.socketURL = '/';
 
-//TODO remove once other things work
-var channel = "myGuideChannel1";
-//TODO remove once other things work
-connection.channel = channel;
-
 /**
  * checks the browser's capabilities and sets the connection state accordingly
  */
@@ -52,7 +53,7 @@ function detectRTCcapabilities(){
         connectionState.DataChannel = connectionStates.DataChannel.Websocket;
     }
     if (!DetectRTC.browser.isChrome && !DetectRTC.browser.isFirefox && !DetectRTC.browser.isOpera) {
-        console.log('webrtc is not supported...');
+        if (showLogs) console.log('not chrome, firefox or opera, webrtc is not supported...');
         connectionState.DataChannel = connectionStates.DataChannel.Websocket;
         connectionState.Media = connectionStates.Media.None;
     }else if(DetectRTC.browser.isChrome || DetectRTC.browser.isFirefox || DetectRTC.browser.isOpera){
@@ -99,6 +100,8 @@ function sendMessageSCTP(message) {
  * @param {String} message message to send
  */
 function sendMessageWebsocket(message) {
+    if(showLogs) console.log("sending message using websocket custom event: " + connection.socketCustomEvent);
+    
     websocket.emit(connection.socketCustomEvent, {
         sender: connection.userid,
         customMessage: message
@@ -109,7 +112,7 @@ function sendMessageWebsocket(message) {
  * by using websocket
  */
 function sendUseWebsocketConnection() {
-    console.log('sending only websocket supported');
+    if (showLogs) console.log('sending: only websocket supported');
     sendMessageWebsocket({
         connection: connectionStates.DataChannel.Websocket
     });
@@ -126,12 +129,46 @@ function sendUsername(name) {
     }
 }
 /**
+ * tourist requests to communicate with guide
+ */
+function sendTouristRequestsGuide(){
+    if (showLogs) console.log('sending: tourist requests guide');
+    sendMessageWebsocket({
+        touristRequestsGuide: true
+    });
+}
+/**
+ * guide accepts tourist's request
+ */
+function sendGuideAcceptsRequest(){
+    if (showLogs) console.log('sending: guide accepts request');
+    sendMessageWebsocket({
+        guideAcceptsRequest: true
+    });
+}
+/**
+ * guide declines tourist's request
+ */
+function sendGuideDeclinesRequest(){
+    if (showLogs) console.log('sending: guide declines request');
+    sendMessageWebsocket({
+        guideDeclinesRequest: true
+    });
+}
+
+function sendTouristRevokesRequest(){
+    if (showLogs) console.log('sending: tourist revokes request');
+    sendMessageWebsocket({
+        touristRevokesRequest: true
+    });
+}
+/**
  * when a message arrived from SCTP or Websocket this function has to be called
  * plays a sound, appends the message to the chat, vibrates
  * @param {String} message message sent by the peer
  */
 function messageArrived(message) {
-    console.log('messageArrived: ' + message);
+    if (showLogs) console.log('messageArrived: ' + message);
     //play message sound
     playSound(sounds.message_arrival);
     appendPeerMessageToChat(message, peername);
@@ -177,9 +214,11 @@ function supportsAudioVideo(){
  */
 function closeConnection() {
     connection.close();
+    /*
     connection.attachStreams.forEach(function (stream) {
         stream.stop();
     });
+    */
 }
 /**
  * closes all media streams
