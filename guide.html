@@ -17,76 +17,10 @@
         <script src="resources/js/ui.js"></script>
         <script src="resources/js/guide.ui.js"></script>
         <script src="resources/js/DetectRTC.js"></script>
+        <script src="resources/js/map.js"></script>
+        <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBfwr4Jux2OwmpetTfqEYpGBoX95Z5obkI&libraries=drawing&callback=initMap" async defer></script>
         <script>
-            //var connection = new RTCMultiConnection();
-
-            //var defaultName = "anonymous";
-            //var peerName = defaultName;
-            //var username = "guide1";
-
-            //var channel = "myGuideChannel1";
-
-            var peer;
-
-            //only for testing
-            //connection.socketURL = 'https://rtcmulticonnection.herokuapp.com:443/';
-            
-            //connection.socketURL = '/';
-
-            /*
-             connection.session = { 
-             data: true,
-             audio: true,
-             oneway: true
-             }
-             */
-            
-            /*
-            connection.session = {
-                data: true
-                , audio: true
-            };
-            */
-
-            //connection.dontCaptureUserMedia = true;
-
-            /*
-            connection.sdpConstraints.mandatory = {
-                OfferToReceiveAudio: false,
-                OfferToReceiveVideo: false
-            };
-            */
-            
-            /*
-            connection.extra = {
-                username: username
-            };
-            */
-
-            //connection.channel = channel;
-
-            /*
-             if(typeof webkitMediaStream !== 'undefined') {
-             connection.attachStreams.push(new webkitMediaStream());
-             }
-             else if(typeof MediaStream !== 'undefined'){
-             connection.attachStreams.push(new MediaStream());
-             }
-             else {
-             console.error('Neither Chrome nor Firefox. This demo may NOT work.');
-             }
-             
-             connection.dontCaptureUserMedia = true;
-             connection.session = {
-             data: true,
-             audio: true
-             };
-             */
-
-
-            //open room for this guide
-            //connection.open(channel);
-
+            //var peer;
 
             connection.onNewSession = function (session) {
                 console.log('new session');
@@ -223,16 +157,6 @@
 
             });
 
-            /*
-            //helper function to send a message
-            //also empties the input
-            function sendMessage(message) {                
-                if ($.trim(message).length > 0) {
-                    sendMessageToPeer(message, true);
-                }
-            }
-            */
-            
             function stopVideo() {
                 var a = connection.attachStreams;
 
@@ -261,12 +185,13 @@
         </header>
         <main id="content">
             <button type="button" id="btn_closeConnection" hidden>close connection</button>
+            <div id="map"></div>
             <div id="video" class="video" hidden>
                 <!--<button type="button" id="btn_shareVideo">share video</button>-->
                 <button type="button" id="btn_stopVideo">stop video</button>
                 <div id="videoContainer" ></div>
             </div>
-            <div class="container" id="chatBox" hidden>
+            <div class="container" id="chatBox" >
                 <div class="row">
                     <!--<div class="col-md-5">-->
                     <div class="panel panel-primary">
@@ -311,8 +236,9 @@
         </main>
         <footer>
             <div id="smallChat" class="smallChat" hidden>
-                <img id="smallChatImg" class="smallChatImg" src="resources/images/smallChat.png" alt="chat small">
+                <img id="smallChatImg" class="smallChatImg" src="resources/images/smallChat.png" alt="chat">
                 <span id="smallChatText" class="smallChatText">Chat</span>
+                <img class="smallChatUp" src="resources/images/arrowUp.png" alt="up">
             </div>
         </footer>
     </body>

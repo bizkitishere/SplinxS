@@ -164,6 +164,11 @@ function sendTouristRevokesRequest(){
         touristRevokesRequest: true
     });
 }
+
+function sendMapData(data){
+    if(showLogs) console.log('sending: mapdata');
+    sendMessageToPeer({map: data}, false);
+}
 /**
  * when a message arrived from SCTP or Websocket this function has to be called
  * plays a sound, appends the message to the chat, vibrates

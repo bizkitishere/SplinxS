@@ -89,6 +89,10 @@ footer {
     vertical-align: middle;
     color: #F3F3F4;
 }
+.smallChatUp {
+    padding: 5px;
+    float: right;
+}
 /*small chat*/
 /*footer*/
 
@@ -303,3 +307,11 @@ footer {
     background: -o-linear-gradient(#fff, #999);
 }
 /*modal dialog*/
+
+/* map */
+#map {
+    width: 85%;
+    height: 100%;
+    float: left;
+}
+/* map */

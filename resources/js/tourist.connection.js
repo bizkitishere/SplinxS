@@ -112,6 +112,10 @@ connection.connectSocket(function (socket) {
  * @param {String} message message sent by peer
  */
 function onMessage(message) {
+    if (message.map){
+        mapMessage(message.map);
+        return;
+    }
     if (message.typing) {
         if (showLogs) console.log('tourist: peer typing');
         peerIsTyping(peername);
@@ -131,6 +135,39 @@ function onMessage(message) {
         return;
     }
     messageArrived(message);
+}
+/**
+ * handles different data sent by the peer to make changes on the map
+ * @param {Object} mapMessage contains the map data
+ */
+function mapMessage(mapMessage) {
+    if (mapMessage.marker) {
+        var marker = mapMessage.marker;
+        if (showLogs) console.log('tourist: map marker');
+        if(marker.add){
+            if (showLogs) console.log('tourist: add marker');
+            var id = marker.id;
+            var pos = marker.pos;
+            if(id  > -1 && pos){
+                if(pos.lat && pos.lng){
+                    addMarker(id, pos);
+                }else{
+                    if(showLogs) console.warn('invalid lcoation: ' + pos);
+                }
+            }else{
+                if(showLogs) console.warn('invalid marker id: ' + id + ' pos: ' + pos);
+            }
+        }
+        if(marker.rem){
+            if (showLogs) console.log('tourist: rem marker');
+            var id = marker.id;
+            if(id > -1){
+                removeMarker(id);
+            }else{
+                if(showLogs) console.warn('invalid id to remove marker: ' + id);
+            }
+        }
+    }
 }
 /**
  * sends the guide a request for communication

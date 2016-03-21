@@ -99,6 +99,10 @@ connection.connectSocket(function (socket) {
  * @param {String} message message sent by peer
  */
 function onMessage(message) {
+    if (message.map){
+        mapMessage(message.map);
+        return;
+    }
     if (message.typing) {
         if (showLogs) console.log('guide: peer typing');
         peerIsTyping(peername);
@@ -121,8 +125,58 @@ function onMessage(message) {
         showGUI();
         return;
     }
-
+    
     messageArrived(message);
+}
+/**
+ * handles different data sent by the peer to make changes on the map
+ * @param {Object} mapMessage contains the map data
+ */
+function mapMessage(mapMessage) {
+    if (mapMessage.tourist) {
+        var tourist = mapMessage.tourist;
+        if (showLogs) console.log('guide: map geo');
+        if (tourist.pos) {
+            var pos = message.map.tourist.pos;
+            if(pos.lat && pos.lng){
+                if (showLogs) console.log('guide: map location, lat: ' + pos.lat + " lng: " + pos.lng);
+                setTouristLocation(pos);
+            }else{
+                if(showLogs) console.warn('invalid location: ' + pos);
+            }
+        }
+        if (tourist.orientation) {
+            var orientation = tourist.orientation;
+            if (showLogs) console.log('guide: map orientation: ' + orientation);
+            setTouristOrientation(orientation);
+        }
+    } else if (mapMessage.marker) {
+        var marker = mapMessage.marker;
+        if (showLogs) console.log('guide: map marker');
+        if(marker.add){
+            if (showLogs) console.log('guide: add marker');
+            var id = marker.id;
+            var pos = marker.pos;
+            if(id > -1 && pos){
+                if(pos.lat && pos.lng){
+                    addMarker(id, pos);
+                }else{
+                    if(showLogs) console.warn('invalid lcoation: ' + pos);
+                }
+            }else{
+                if(showLogs) console.warn('invalid marker id: ' + id + ' pos: ' + pos);
+            }
+        }
+        if(marker.rem){
+            if (showLogs) console.log('guide: rem marker');
+            var id = marker.id;
+            if(id > -1){
+                removeMarker(id);
+            }else{
+                if(showLogs) console.warn('invalid id to remove marker: ' + id);
+            }
+        }
+    }
 }
 /**
  * send a message to the tourist that the connection request was accepted
