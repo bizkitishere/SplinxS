@@ -42,6 +42,8 @@ DetectRTC.load(function () {
 
 var connection = new RTCMultiConnection();
 connection.socketURL = '/';
+//only for testing
+//rtcMultiConnection.socketURL = 'https://rtcmulticonnection.herokuapp.com:443/';
 
 /**
  * checks the browser's capabilities and sets the connection state accordingly
