@@ -5,6 +5,7 @@
  */
 var modalDialog;
 var modalContent;
+var mapControls;
 
 /**
  * initialises ui variables for guide
@@ -14,12 +15,14 @@ function initGuideUI(){
     if(showLogs) console.log('guide: init gui');
     modalDialog = $("#modalDialog");
     modalContent = $("#modalContent");
+    mapControls = $("#mapControls");
     
     initGuideButtons();
 }
 
 function showGuideUI(){
     if(showLogs) console.log('guide: show gui');
+    mapControls.show();
 }
 
 function showModalDialog(content) {

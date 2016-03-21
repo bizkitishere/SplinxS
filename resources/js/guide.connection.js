@@ -145,7 +145,7 @@ function mapMessage(mapMessage) {
                 if(showLogs) console.warn('invalid location: ' + pos);
             }
         }
-        if (tourist.orientation) {
+        if (tourist.orientation > -1) {
             var orientation = tourist.orientation;
             if (showLogs) console.log('guide: map orientation: ' + orientation);
             setTouristOrientation(orientation);

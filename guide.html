@@ -106,6 +106,7 @@
                 initUI();
                 initGuideUI();
                 showGUI();
+                showGuideUI();
                 
                 connection.videosContainer = $("#videoContainer");
 
@@ -153,10 +154,41 @@
                     console.log('closing connection');
                     closeConnection();
                 });
-
-
+                
+                //map controls to set update interval of tourist
+                
+                $("#btn_updateIntervalOff").click(function (e) {
+                    console.log('update interval off button clicked');
+                    sendUpdateInterval(updateIntervals.off);
+                });
+                
+                $("#btn_updateIntervalBatman").click(function (e) {
+                    console.log('update interval batman button clicked');
+                    sendUpdateInterval(updateIntervals.batman);
+                });
+                
+                $("#btn_updateIntervalSpiderman").click(function (e) {
+                    console.log('update interval spiderman button clicked');
+                    sendUpdateInterval(updateIntervals.spiderman);
+                });
+                
+                $("#btn_updateIntervalIronman").click(function (e) {
+                    console.log('update interval ironman button clicked');
+                    sendUpdateInterval(updateIntervals.ironman);
+                });
+                
+                $("#btn_updateIntervalSuperman").click(function (e) {
+                    console.log('update interval superman button clicked');
+                    sendUpdateInterval(updateIntervals.superman);
+                });
+                
+                $("#btn_updateIntervalFlash").click(function (e) {
+                    console.log('update interval flash button clicked');
+                    sendUpdateInterval(updateIntervals.flash);
+                });
+                
             });
-
+            
             function stopVideo() {
                 var a = connection.attachStreams;
 
@@ -185,13 +217,24 @@
         </header>
         <main id="content">
             <button type="button" id="btn_closeConnection" hidden>close connection</button>
-            <div id="map"></div>
+            <br />
+            <div id="mapControls" hidden>
+                <span>map update interval</span>
+                <br />
+                <button type="button" id="btn_updateIntervalOff">off</button>
+                <button type="button" id="btn_updateIntervalBatman">batman</button>
+                <button type="button" id="btn_updateIntervalSpiderman">spiderman</button>
+                <button type="button" id="btn_updateIntervalIronman">ironman</button>
+                <button type="button" id="btn_updateIntervalSuperman">superman</button>
+                <button type="button" id="btn_updateIntervalFlash">flash</button>
+            </div>
+            <div id="map" hidden></div>
             <div id="video" class="video" hidden>
                 <!--<button type="button" id="btn_shareVideo">share video</button>-->
                 <button type="button" id="btn_stopVideo">stop video</button>
                 <div id="videoContainer" ></div>
             </div>
-            <div class="container" id="chatBox" >
+            <div class="container" id="chatBox" hidden>
                 <div class="row">
                     <!--<div class="col-md-5">-->
                     <div class="panel panel-primary">

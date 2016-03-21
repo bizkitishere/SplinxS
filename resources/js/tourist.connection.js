@@ -113,6 +113,7 @@ connection.connectSocket(function (socket) {
  */
 function onMessage(message) {
     if (message.map){
+        if (showLogs) console.log('tourist: map message');
         mapMessage(message.map);
         return;
     }
@@ -167,6 +168,11 @@ function mapMessage(mapMessage) {
                 if(showLogs) console.warn('invalid id to remove marker: ' + id);
             }
         }
+    }
+    else if(mapMessage.updateInterval > -1){
+        var interval = mapMessage.updateInterval;
+        if (showLogs) console.log('tourist: update interval: ' + interval);
+        setUpdateInterval(interval);
     }
 }
 /**

@@ -14,6 +14,7 @@ var smallChatColors = {
     no_message: "#2585C4",
     new_message: "#28B294"
 };
+var mapDiv;
 
 /**
  * initialises ui variables
@@ -25,6 +26,7 @@ function initUI(){
     smallChat = $("#smallChat");
     chatBox = $("#chatBox");
     isTypingSpan = $("#spn_isTyping");
+    mapDiv = $("#map");
 }
 /**
  * shows the chat box
@@ -188,7 +190,9 @@ function showGUI(){
  * will display the elements necessary for a websocket connection
  */
 function showWebsocketOnlyGUI(){
+    if(showLogs) console.log('show websocket only gui');
     showChat();
+    showMap();
     //TODO hide mic, video, etc.
     $("#btn_closeConnection").show();
 }
@@ -196,7 +200,9 @@ function showWebsocketOnlyGUI(){
  * will display the elements necessary for a connection with no media
  */
 function showNoMediaGUI(){
+    if(showLogs) console.log('show no media gui');
     showChat();
+    showMap();
     //TODO hide mic, video, etc.
     //TODO peer might have media available
     $("#btn_closeConnection").show();
@@ -205,7 +211,9 @@ function showNoMediaGUI(){
  * will display all gui elements for a Webrtc conection
  */
 function showAudioVideoGUI(){
+    if(showLogs) console.log('show audio and video gui');
     showChat();
+    showMap();
     //TODO show audio, video, etc.
     $("#video").show();
     $("#btn_closeConnection").show();
@@ -214,7 +222,9 @@ function showAudioVideoGUI(){
  * will display only audio gui elements for a Webrtc conection
  */
 function showAudioOnlyGUI(){
+    if(showLogs) console.log('show audio only gui');
     showChat();
+    showMap();
     //TODO show audio...
     $("#btn_closeConnection").show();
 }
@@ -222,8 +232,24 @@ function showAudioOnlyGUI(){
  * will display onyl video gui elements for a Webrtc conection
  */
 function showVideoOnlyGUI(){
+    if(showLogs) console.log('show video only gui');
     showChat();
+    showMap();
     //TODO show video...
     $("#video").show();
     $("#btn_closeConnection").show();
+}
+/**
+ * shows the map
+ */
+function showMap(){
+    mapDiv.show();
+    //map is not shown correctly, this will help
+    resizeMap();
+}
+/**
+ * hides the map
+ */
+function hideMap(){
+    mapDiv.hide();
 }
