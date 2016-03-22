@@ -16,6 +16,7 @@ var connection = new RTCMultiConnection();
 
 username = "tourist";
 
+
 /**
  * sets the channel, media and mandatory constraints
  */
@@ -69,11 +70,15 @@ connection.onmessage = function (message) {
  * @param {Websocket} socket Websocket used for signalling and sending other messages
  */
 connection.connectSocket(function (socket) {
-    if (showLogs) console.log('tourist: websocket connected');
+    if (showLogs) console.log('tourist: websocket connected, custom event: ' + connection.socketCustomEvent);
     websocket = socket;
-    
+    setSocketCustomEvent();
+});
+
+function setSocketCustomEvent(){
+    if(showLogs) console.log('tourist: setting custom event: ' + connection.socketCustomEvent);
     // listen custom messages from server
-    socket.on(connection.socketCustomEvent, function (message) {
+    websocket.on(connection.socketCustomEvent, function (message) {
         if (showLogs) console.log('tourist: websocket message arrived');
         if (!message.customMessage) {
             if (showLogs) console.log('tourist: empty websocket message');
@@ -106,7 +111,7 @@ connection.connectSocket(function (socket) {
         
         onMessage(message.customMessage);
     });
-});
+}
 /**
  * checks what kind of message arrived acts accordingly
  * @param {String} message message sent by peer
@@ -217,18 +222,16 @@ function changeToNextChannel(){
     if(showLogs) console.log('tourist: changing to next channel');
     clearTimeout(conEstabTimeout);
     conEstabTimeout = null;
-    //TODO check if necessary
-    //connection.close();
-    //connection.disconnect();
     channelCounter++;
-    if(channelCounter == channels.length){
+    if(channelCounter >= channels.length){
         if(showLogs) console.log('tourist: tried all channels without success :\'(');
         hideLoadBox();
         //TODO do something...
         return;
     }
     channel = channels[channelCounter];
-    setSessionConstraints(); //TODO check if works
+    setSessionConstraints();
+    setSocketCustomEvent();  
     initConnectionWithGuide();
 }
 

@@ -10,12 +10,12 @@ showLogs = true;
 //var connection = new RTCMultiConnection();
 
 //guide channel
-var channel = "myGuideChannel1";
+var channel = "myGuideChannel2";
 connection.channel = channel;
 
 connection.socketCustomEvent = connection.channel;
 
-username = "guide1";
+username = "guide2";
 
 connection.session = {
     data: true
@@ -31,7 +31,7 @@ connection.open(channel);
 
 
 connection.onopen = function (event) {
-    if (showLogs) console.log('guide: connection opened in channel: ' + connection.channel);
+    if (showLogs) console.log('guide: connection opened');
 
     if (connection.alreadyOpened)
         return;

@@ -102,7 +102,7 @@ function sendMessageSCTP(message) {
  * @param {String} message message to send
  */
 function sendMessageWebsocket(message) {
-    if(showLogs) console.log("sending message using websocket custom event: " + connection.socketCustomEvent);
+    if(showLogs) console.log("sending: message using websocket custom event: " + connection.socketCustomEvent);
     
     websocket.emit(connection.socketCustomEvent, {
         sender: connection.userid,
