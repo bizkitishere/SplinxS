@@ -41,36 +41,6 @@
             connection.onaddstream = function (e) {
                 console.log('onaddstream');
                 debugger;
-            }
-
-            connection.onstream = function (event) {
-                console.log('stream started');
-
-                /*
-                 if(!event.stream.getAudioTracks().length && !event.stream.getVideoTracks().length) {
-                 console.log('received empty stream');
-                 debugger;
-                 return;
-                 }
-                 */
-
-
-                if (event.stream.type == "local") {
-                    console.log('own stream');
-                    //$("#myVideo").append(event.mediaElement);
-                } else if (event.stream.type == "remote") {
-                    console.log('remote stream');
-                    //connection.videosContainer.append(event.mediaElement);
-                    $("#videoContainer").append(event.mediaElement);
-
-                    peer;
-
-                    var a = $("#videoContainer");
-
-                }
-
-                //connection.videosContainer.append(event.mediaElement);
-
             };
 
             connection.onstreamended = function (event) {
@@ -187,6 +157,34 @@
                     sendUpdateInterval(updateIntervals.flash);
                 });
                 
+                
+                $("#btn_startAudio").click(function (e) {
+                    if(showLogs) console.log('guide: start audio button clicked');
+                    
+                    debugger;
+                    
+                    connection.dontCaptureUserMedia = false;
+                    
+                    connection.addStream({
+                        audio: true,
+                        oneway: true
+                    });
+                    
+                    
+                    
+                    
+                });
+                
+                $("#btn_stopAudio").click(function (e) {
+                    if(showLogs) console.log('guide: stop audio button clicked');
+                    connection.attachStreams.forEach(function(stream) {
+                        stream.stop();
+                    });
+
+                    connection.renegotiate();
+                });
+                
+                
             });
             
             function stopVideo() {
@@ -218,6 +216,16 @@
         <main id="content">
             <button type="button" id="btn_closeConnection" hidden>close connection</button>
             <br />
+            <div id="audio" hidden>
+                <button type="button" id="btn_startAudio">start audio</button>
+                <button type="button" id="btn_stopAudio">stop audio</button>
+            </div>
+            <br />
+            <div id="video" class="video" hidden>
+                <button type="button" id="btn_stopVideo">stop video</button>
+                <div id="videoContainer" ></div>
+            </div>
+            <br />
             <div id="mapControls" hidden>
                 <span>map update interval</span>
                 <br />
@@ -229,11 +237,6 @@
                 <button type="button" id="btn_updateIntervalFlash">flash</button>
             </div>
             <div id="map" hidden></div>
-            <div id="video" class="video" hidden>
-                <!--<button type="button" id="btn_shareVideo">share video</button>-->
-                <button type="button" id="btn_stopVideo">stop video</button>
-                <div id="videoContainer" ></div>
-            </div>
             <div class="container" id="chatBox" hidden>
                 <div class="row">
                     <!--<div class="col-md-5">-->
