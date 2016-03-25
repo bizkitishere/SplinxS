@@ -20,13 +20,26 @@ connection.socketCustomEvent = connection.channel;
 
 username = "guide1";
 
+if (typeof webkitMediaStream !== 'undefined') {
+    connection.attachStreams.push(new webkitMediaStream());
+}
+else if (typeof MediaStream !== 'undefined') {
+    connection.attachStreams.push(new MediaStream());
+}
+else {
+    console.error('Neither Chrome nor Firefox. This demo may NOT work.');
+}
+
+
+//connection.dontCaptureUserMedia = true;
+
 connection.session = {
     data: true
-            //, audio: true
+    //,audio: true
 };
 
 connection.sdpConstraints.mandatory = {
-    OfferToReceiveAudio: false,
+    OfferToReceiveAudio: true,
     OfferToReceiveVideo: false
 };
 
@@ -51,6 +64,23 @@ connection.onmessage = function (message) {
     }
     onMessage(message.data);
 };
+
+connection.onstream = function (event) {
+    if (showLogs) console.log('guide: stream started');
+    if (!event.stream.getAudioTracks().length && !event.stream.getVideoTracks().length) {
+        return;
+    }
+    
+    if(event.stream.type == "local"){
+        if (showLogs) console.log('guide: local stream started');
+        
+    }else if(event.stream.type == "remote"){
+        if (showLogs) console.log('guide: remote stream started');
+        connection.videosContainer.append(event.mediaElement);
+    }
+    
+};
+
 
 /**
  * fires when the signalling websocket was connected successfully
@@ -98,7 +128,7 @@ connection.connectSocket(function (socket) {
     });
 });
 /**
- * checks what kind of message arrived acts accordingly
+ * checks what kind of message arrived and acts accordingly
  * @param {String} message message sent by peer
  */
 function onMessage(message) {

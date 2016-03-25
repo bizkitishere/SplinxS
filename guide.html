@@ -45,11 +45,12 @@
 
             connection.onstreamended = function (event) {
                 console.log('stream ended');
-                $("#videoContainer").empty();
-
+                //$("#videoContainer").empty();
+                /*
                 connection.attachStreams.forEach(function (stream) {
                     stream.stop();
                 });
+                */
             }
             
             connection.onclose = function (event) {
@@ -161,9 +162,8 @@
                 $("#btn_startAudio").click(function (e) {
                     if(showLogs) console.log('guide: start audio button clicked');
                     
-                    debugger;
                     
-                    connection.dontCaptureUserMedia = false;
+                    //connection.dontCaptureUserMedia = false;
                     
                     connection.addStream({
                         audio: true,

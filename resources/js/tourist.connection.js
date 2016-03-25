@@ -12,9 +12,9 @@ var channelCounter = 0;
 var channels = ["myGuideChannel1"];
 var channel = channels[channelCounter];
 
-var connection = new RTCMultiConnection();
+//var connection = new RTCMultiConnection();
 
-username = "tourist";
+username = "tourist1";
 
 var saveConnInterval;
 var saveConnIntervalTimer = 60000;
@@ -53,8 +53,8 @@ function setSessionConstraints() {
     };
 
     connection.sdpConstraints.mandatory = {
-        OfferToReceiveAudio: false,
-        OfferToReceiveVideo: false
+        OfferToReceiveAudio: true,
+        OfferToReceiveVideo: true
     };
 }
 
@@ -74,6 +74,36 @@ connection.onmessage = function (message) {
         return;
     }
     onMessage(message.data);
+};
+
+connection.onstream = function (event) {
+    if (showLogs) console.log('tourist: stream started');
+    
+    if (!event.stream.getAudioTracks().length && !event.stream.getVideoTracks().length) {
+        return;
+    }
+    
+    if(event.stream.type == "local"){
+        if (showLogs) console.log('tourist: local stream started');
+        if(event.stream.isVideo){
+            if (showLogs) console.log('tourist: local video stream started');
+            //TODO make nicer code
+            var video = $("#myVideo");
+            video.append(event.mediaElement);
+            
+        }else if(event.stream.isAudio){
+            if (showLogs) console.log('tourist: local audio stream started');
+            
+            var video = $("#myVideo");
+            video.append(event.mediaElement);
+            
+            debugger;
+        }
+    }else if(event.stream.type == "remote"){
+        if (showLogs) console.log('tourist: remote stream started');
+        //connection.videosContainer.append(event.mediaElement);
+    }
+    
 };
 
 /**

@@ -75,7 +75,7 @@
 
                 $("#btn_shareVideo").click(function (e) {
                     console.log('share video clicked');
-                    shareVideo();
+                    startVideo();
                 });
 
                 $("#btn_stopVideo").click(function (e) {
@@ -134,52 +134,12 @@
 
             });
 
-            function shareVideo() {
-                /*
-                 navigator.webkitGetUserMedia({
-                 video: {
-                 chromeMediaSource: 'screen'
-                 }
-                 }, function(stream) {
-                 connection.attachExternalStream(stream, true);
-                 }, function(error) {
-                 alert(JSON.stringify(error));
-                 };
-                 */
-
-                peer;
-                connection;
-
-                //debugger;
-
-                //connection.dontCaptureUserMedia = false;
-
-                /*
-                 peer.addStream({
-                 audio: true,
-                 video: true,
-                 oneway: true
-                 });
-                 */
-
-                //connection.dontCaptureUserMedia = false;
-
-                /*
-                 if(connection.attachStreams.length) {
-                 connection.getAllParticipants().forEach(function(p) {
-                 connection.attachStreams.forEach(function(stream) {
-                 connection.peers[p].peer.removeStream(stream);
-                 });
-                 });
-                 connection.attachStreams = [];
-                 connection.observers.all();
-                 }
-                 */
+            function startVideo() {
 
                 connection.addStream({
                     audio: true,
-                    video: true//,
-                            //oneway: true
+                    video: true,
+                    oneway: true
                 });
 
             }
