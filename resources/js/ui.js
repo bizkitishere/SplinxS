@@ -15,6 +15,8 @@ var smallChatColors = {
     new_message: "#28B294"
 };
 var mapDiv;
+var videoDiv;
+var audioDiv;
 
 /**
  * initialises ui variables
@@ -27,6 +29,8 @@ function initUI(){
     chatBox = $("#chatBox");
     isTypingSpan = $("#spn_isTyping");
     mapDiv = $("#map");
+    videoDiv = $("#video");
+    audioDiv = $("#audio");
 }
 /**
  * shows the chat box
@@ -215,7 +219,8 @@ function showAudioVideoGUI(){
     showChat();
     showMap();
     //TODO show audio, video, etc.
-    $("#video").show();
+    showVideo();
+    showAudio();
     $("#btn_closeConnection").show();
 }
 /**
@@ -226,6 +231,7 @@ function showAudioOnlyGUI(){
     showChat();
     showMap();
     //TODO show audio...
+    showAudio();
     $("#btn_closeConnection").show();
 }
 /**
@@ -236,7 +242,7 @@ function showVideoOnlyGUI(){
     showChat();
     showMap();
     //TODO show video...
-    $("#video").show();
+    showVideo();
     $("#btn_closeConnection").show();
 }
 /**
@@ -252,4 +258,28 @@ function showMap(){
  */
 function hideMap(){
     mapDiv.hide();
+}
+/**
+ * shows the audio controls
+ */
+function showAudio(){
+    audioDiv.show();
+}
+/**
+ * hides the audio controls
+ */
+function hideAudio(){
+    audioDiv.hide();
+}
+/**
+ * shows the video controls
+ */
+function showVideo(){
+    videoDiv.show();
+}
+/**
+ * hides the video controls
+ */
+function hideVideo(){
+    videoDiv.hide();
 }
