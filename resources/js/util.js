@@ -64,7 +64,14 @@ function getCurrentTime() {
 
     return currentTime;
 }
-
+/**
+ * gets the current time as unix timestamp in milliseconds
+ * @returns {Number} the current time as unix timestamp
+ */
+function getCurrentTimeMillis(){
+    var currTime = new Date().getTime();
+    return currTime;
+}
 /**
  * plays a sound or does nothing if the specified sound does not exist
  * @param {sounds} sound sound that should be played
@@ -157,4 +164,30 @@ function meStoppedTyping() {
         stoppedTyping: true
     }, false);
 }
-
+/**
+ * saves data to the localstorage with a given key
+ * @param {string} key to save data with
+ * @param {object} data to save
+ */
+function saveToLocalStorage(key, data){
+    if(showLogs) console.log('saving to localstorage, key: ' + key + ' data: ' + data); 
+    localStorage.setItem(key,JSON.stringify(data));
+}
+/**
+ * gets an object stored in localstorage or null
+ * @param {string} key item to get from localstorage
+ * @returns {Object} the object from localstorage or null
+ */
+function getFromLocalStorage(key){
+    if(showLogs) console.log('getting from localstorage, key: ' + key);
+    var data = JSON.parse(localStorage.getItem(key));
+    return data;
+}
+/**
+ * delets all items from localstorage (if localStorage is supported by the device)
+ */
+function clearLocalStorage(){
+    if(typeof(Storage) !== "undefined") {
+        localStorage.clear();
+    }
+}

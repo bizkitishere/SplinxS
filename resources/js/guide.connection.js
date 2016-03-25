@@ -9,6 +9,9 @@ showLogs = true;
 
 //var connection = new RTCMultiConnection();
 
+var ongoingConnectionInterval;
+var ongoingConnectionIntervalTimer = 60 * 1000; //60 seconds
+
 //guide channel
 var channel = "myGuideChannel1";
 connection.channel = channel;
@@ -27,7 +30,7 @@ connection.sdpConstraints.mandatory = {
     OfferToReceiveVideo: false
 };
 
-connection.open(channel);
+connection.open(connection.channel);
 
 
 connection.onopen = function (event) {
@@ -36,7 +39,7 @@ connection.onopen = function (event) {
     if (connection.alreadyOpened)
         return;
     connection.alreadyOpened = true;
-
+    
 };
 
 
@@ -123,6 +126,12 @@ function onMessage(message) {
         peername = message.username;
         sendUsername(username);
         showGUI();
+        informServerOngoingConnection();
+        //set param on db that guide is connected to tourist
+        ongoingConnectionInterval = setInterval(function () {
+            informServerOngoingConnection();
+        }, ongoingConnectionIntervalTimer);
+
         return;
     }
     
@@ -197,3 +206,14 @@ function guideDeclinesRequest(){
     conEstabTimeout = null;
 }
 
+function informServerOngoingConnection(){
+    if(showLogs) console.log('guide: informing server that connection is ongoing');
+    //TODO save in db timestamp of ongoing connection
+}
+/**
+ * stopps the guide from sending messages to the server that a connection is ongoing
+ */
+function ongoingConnectionClosed(){
+    if(showLogs) console.log('guide: ongoing connection closed normally');
+    clearInterval(ongoingConnectionInterval);
+}

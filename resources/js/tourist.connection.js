@@ -16,6 +16,10 @@ var connection = new RTCMultiConnection();
 
 username = "tourist";
 
+var saveConnInterval;
+var saveConnIntervalTimer = 60000;
+var localStorageConnectionName = "connection";
+var localStoragePreviousConnectionTimeout = 20 * 60 * 1000;//20 min in milliseconds
 
 /**
  * sets the channel, media and mandatory constraints
@@ -26,6 +30,14 @@ setSessionConstraints();
 function setSessionConstraints() {
     //connection = new RTCMultiConnection();
     //connection.socketURL = '/';
+    
+    if(showLogs) {
+        console.log('tourist: setting session constraints');
+        console.log('tourist: channel counter: ' + channelCounter);
+        console.log('tourist: channel: ' + channels[channelCounter]);
+    }
+    
+    channel = channels[channelCounter];
     
     connection.channel = channel;
     
@@ -70,9 +82,9 @@ connection.onmessage = function (message) {
  * @param {Websocket} socket Websocket used for signalling and sending other messages
  */
 connection.connectSocket(function (socket) {
-    if (showLogs) console.log('tourist: websocket connected, custom event: ' + connection.socketCustomEvent);
+    if (showLogs) console.log('tourist: websocket connected');
     websocket = socket;
-    setSocketCustomEvent();
+    //setSocketCustomEvent();
 });
 
 function setSocketCustomEvent(){
@@ -180,13 +192,23 @@ function mapMessage(mapMessage) {
         setUpdateInterval(interval);
     }
 }
+
+function connectToGuides(){
+    showLoadBox();
+    //check if connection with previous guide was interrupted, sets first guide to call
+    checkPreviousConnectionInterrupted();
+    
+    initConnectionWithGuide();
+}
 /**
  * sends the guide a request for communication
  */
 function initConnectionWithGuide() {
-    if(showLogs) console.log('tourist: initiating connection with guide in channel: ' + channel);
+    if(showLogs) console.log('tourist: initiating connection');
     
-    showLoadBox();
+    setSessionConstraints();
+    
+    setSocketCustomEvent();
     
     //request connection with current channel (guide)
     sendTouristRequestsGuide();
@@ -200,18 +222,12 @@ function initConnectionWithGuide() {
 function establishConnectionWithGuide() {
     if (showLogs) console.log('establishing connection with guide');
     //TODO check if also possible in websocket case
-    connection.join(channel);
+    connection.join(connection.channel);
+    
+    //connection established, save in case connection is interrupted
+    storeConnection();
     
     hideLoadBox();
-    
-    /*
-    if (!supportsOnlyWebsocket()) {
-        if (showLogs) console.log('tourist: joining channel: ' + channel);
-        connection.join(channel);
-    }else{
-        if (showLogs) console.log('tourist: joining using websocket');
-    }
-    */
     showGUI();
     showTouristUI();
 }
@@ -223,15 +239,58 @@ function changeToNextChannel(){
     clearTimeout(conEstabTimeout);
     conEstabTimeout = null;
     channelCounter++;
+    
     if(channelCounter >= channels.length){
         if(showLogs) console.log('tourist: tried all channels without success :\'(');
         hideLoadBox();
         //TODO do something...
         return;
     }
-    channel = channels[channelCounter];
+    //channel = channels[channelCounter];
     setSessionConstraints();
     setSocketCustomEvent();  
     initConnectionWithGuide();
 }
-
+/**
+ * stores channel name and current minute to localstorage every 60 seconds (if supported)
+ */
+function storeConnection(){
+    if(typeof(Storage) !== "undefined") {
+        // Code for localStorage/sessionStorage.
+        if(showLogs) console.log('tourist: localstorage supported');
+        saveConnection();
+        saveConnInterval = setInterval(function () {
+            saveConnection();
+        }, saveConnIntervalTimer);
+    } else {
+        if(showLogs) console.log('tourist: localstorage not supported...');
+        //TODO use cookies?
+    }
+}
+/**
+ * saves channel name and current minute to localstorage
+ */
+function saveConnection(){
+    if(showLogs) console.log('saving connection');
+    var data = {channel: connection.channel, time: getCurrentTimeMillis()};
+    saveToLocalStorage(localStorageConnectionName, data);
+}
+/**
+ * checks if a previous connection with a guide has been interrupted
+ * adds this connection to the first of the list
+ */
+function checkPreviousConnectionInterrupted(){
+    var data = getFromLocalStorage(localStorageConnectionName);
+    if(data != null){
+        var c = data.channel;
+        var t = data.time;
+        if(t > 0 && c != ""){
+            var currTime = getCurrentTimeMillis();
+            var diff = currTime - t;
+            if(diff < localStoragePreviousConnectionTimeout){
+                if(showLogs) console.log('tourist: previous connection was interrupted, guide: ' + c);
+                channels.splice(0, 0, c);
+            }
+        }
+    }
+}
