@@ -196,7 +196,7 @@ function showGUI(){
 function showWebsocketOnlyGUI(){
     if(showLogs) console.log('show websocket only gui');
     showChat();
-    showMap();
+    //showMap();
     //TODO hide mic, video, etc.
     $("#btn_closeConnection").show();
 }
@@ -206,7 +206,7 @@ function showWebsocketOnlyGUI(){
 function showNoMediaGUI(){
     if(showLogs) console.log('show no media gui');
     showChat();
-    showMap();
+    //showMap();
     //TODO hide mic, video, etc.
     //TODO peer might have media available
     $("#btn_closeConnection").show();
@@ -217,7 +217,7 @@ function showNoMediaGUI(){
 function showAudioVideoGUI(){
     if(showLogs) console.log('show audio and video gui');
     showChat();
-    showMap();
+    //showMap();
     //TODO show audio, video, etc.
     showVideo();
     showAudio();
@@ -229,7 +229,7 @@ function showAudioVideoGUI(){
 function showAudioOnlyGUI(){
     if(showLogs) console.log('show audio only gui');
     showChat();
-    showMap();
+    //showMap();
     //TODO show audio...
     showAudio();
     $("#btn_closeConnection").show();
@@ -240,7 +240,7 @@ function showAudioOnlyGUI(){
 function showVideoOnlyGUI(){
     if(showLogs) console.log('show video only gui');
     showChat();
-    showMap();
+    //showMap();
     //TODO show video...
     showVideo();
     $("#btn_closeConnection").show();

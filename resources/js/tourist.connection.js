@@ -45,6 +45,16 @@ function setSessionConstraints() {
     
     //connection.socketURL = '/';
 
+    if (typeof webkitMediaStream !== 'undefined') {
+        connection.attachStreams.push(new webkitMediaStream());
+    }
+    else if (typeof MediaStream !== 'undefined') {
+        connection.attachStreams.push(new MediaStream());
+    }
+    else {
+        console.error('Neither Chrome nor Firefox. This demo may NOT work.');
+    }
+
     //TODO only add media that is supported by the browser
     connection.session = {
         data: true
@@ -53,8 +63,8 @@ function setSessionConstraints() {
     };
 
     connection.sdpConstraints.mandatory = {
-        OfferToReceiveAudio: true,
-        OfferToReceiveVideo: true
+        OfferToReceiveAudio: false,
+        OfferToReceiveVideo: false
     };
 }
 
@@ -101,6 +111,17 @@ connection.onstream = function (event) {
         }
     }else if(event.stream.type == "remote"){
         if (showLogs) console.log('tourist: remote stream started');
+        if(event.stream.isAudio){
+            if (showLogs) console.log('tourist: remote audio stream started');
+            var audio = $("#audioDiv");
+            audio.append(event.mediaElement);
+            event.mediaElement.play();
+            setTimeout(function () {
+                event.mediaElement.play();
+            }, 2000);
+
+            
+        }
         //connection.videosContainer.append(event.mediaElement);
     }
     

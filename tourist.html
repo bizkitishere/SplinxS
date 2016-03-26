@@ -21,11 +21,11 @@
         <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBfwr4Jux2OwmpetTfqEYpGBoX95Z5obkI&libraries=drawing&callback=initMap" async defer></script>
         <script>
             //var peer;
-
+            /*
             connection.onstreamended = function (e) {
                 console.log('stream ended');
 
-                $("#myVideo").empty();
+                //$("#myVideo").empty();
 
                 connection.attachStreams.forEach(function (stream) {
                     stream.stop();
@@ -33,7 +33,7 @@
 
                 //e.mediaElement.parentNode.removeChild(e.mediaElement);
             };
-
+            */
 
             $(document).ready(function () {
 
@@ -43,7 +43,12 @@
                 //showGUI();
                 
                 connection.videosContainer = $("#videoContainer");
-
+                
+                connection.onaddstream = function (e) {
+                    console.log('onaddstream');
+                    debugger;
+                };
+                
                 $("#btn_joinConnection").click(function () {
                     if(showLogs) console.log('tourist: join connection button clicked');
                     connectToGuides();
@@ -99,27 +104,49 @@
                 });
 
                 $("#btn_muteVideo").click(function (e) {
-                    console.log('muting vide');
-
+                    console.log('mude video button clicked');
+                    
                     connection.attachStreams.forEach(function (stream) {
-                        stream.mute();
+                        if(stream.isVideo){
+                            if(showLogs) console.log('muting video stream');
+                            stream.mute();
+                        }
                     });
+                    
+
+                    /*
+                    connection.attachStreams.forEach(function (stream) {
+                        debugger;
+                        stream.mute();
+                        .mute({
+                        isAudio: true,
+                        remote: true
+                    });
+                    });
+                    */
 
                 });
 
                 $("#btn_unmuteVideo").click(function (e) {
                     console.log('unmuting video');
+                    
                     connection.attachStreams.forEach(function (stream) {
-                        stream.unmute();
+                        if(stream.isVideo){
+                            if(showLogs) console.log('unmuting video stream');
+                            stream.unmute();
+                        }
                     });
+                    
                 });
                 
                 $("#btn_startAudio").click(function (e) {
                     if(showLogs) console.log('tourist: start audio button clicked');
+                    
                     connection.addStream({
-                        audio: true,
-                        oneway: true
+                        audio: true
+                        //,oneway: true
                     });
+
 
                 });
                 
@@ -143,6 +170,18 @@
                 });
 
             }
+            
+            
+            connection.onmute = function(event) {
+                event.mediaElement.pause();
+            };
+
+            connection.onunmute = function(event) {
+                 event.mediaElement.play();
+            };
+            
+            
+            
 
         </script>
     </head>
@@ -162,6 +201,7 @@
             <div id="audio" hidden>
                 <button type="button" id="btn_startAudio">start audio</button>
                 <button type="button" id="btn_stopAudio">stop audio</button>
+                <div id="audioDiv"></div>
             </div>
             <br />
             <div id="video" class="video" hidden>

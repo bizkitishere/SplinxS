@@ -43,15 +43,7 @@
                 debugger;
             };
 
-            connection.onstreamended = function (event) {
-                console.log('stream ended');
-                //$("#videoContainer").empty();
-                /*
-                connection.attachStreams.forEach(function (stream) {
-                    stream.stop();
-                });
-                */
-            }
+            
             
             connection.onclose = function (event) {
                 console.log('close');
@@ -187,20 +179,13 @@
                 
             });
             
-            function stopVideo() {
-                var a = connection.attachStreams;
+            connection.onmute = function(event) {
+                event.mediaElement.pause();
+            };
 
-                var b = a[0];
-
-                b.stop();
-
-                $("#videoContainer").empty();
-
-                connection.attachStreams.forEach(function (stream) {
-                    stream.stop();
-                });
-
-            }
+            connection.onunmute = function(event) {
+                 event.mediaElement.play();
+            };
 
         </script>
     </head>
@@ -219,6 +204,7 @@
             <div id="audio" hidden>
                 <button type="button" id="btn_startAudio">start audio</button>
                 <button type="button" id="btn_stopAudio">stop audio</button>
+                <div id="audioDiv"></div>
             </div>
             <br />
             <div id="video" class="video" hidden>

@@ -243,4 +243,6 @@ function stopVideo() {
     connection.attachStreams.forEach(function (stream) {
         stream.stop();
     });
+    connection.renegotiate();
+
 }

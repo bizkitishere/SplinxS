@@ -39,7 +39,7 @@ connection.session = {
 };
 
 connection.sdpConstraints.mandatory = {
-    OfferToReceiveAudio: true,
+    OfferToReceiveAudio: false,
     OfferToReceiveVideo: false
 };
 
@@ -73,14 +73,46 @@ connection.onstream = function (event) {
     
     if(event.stream.type == "local"){
         if (showLogs) console.log('guide: local stream started');
+        if(event.stream.isAudio){
+            if (showLogs) console.log('guide: local audio stream started');
+            
+        }
         
     }else if(event.stream.type == "remote"){
         if (showLogs) console.log('guide: remote stream started');
-        connection.videosContainer.append(event.mediaElement);
+        if(event.stream.isAudio){
+            if (showLogs) console.log('guide: remote audio stream started');
+            var audio = $("#audioDiv");
+            audio.append(event.mediaElement);
+            event.mediaElement.play();
+            setTimeout(function () {
+                event.mediaElement.play();
+            }, 2000);
+        }else if(event.stream.isVideo){
+            if (showLogs) console.log('guide: remote video stream started');
+            connection.videosContainer.append(event.mediaElement);
+            
+        }
+        
+        
+        
     }
     
 };
+/*
+connection.onstreamended = function (event) {
+    console.log('stream ended');
+    $("#videoContainer").empty();
+    
+    event.mediaElement.remove();
 
+
+    connection.attachStreams.forEach(function (stream) {
+        stream.stop();
+    });
+
+}
+*/
 
 /**
  * fires when the signalling websocket was connected successfully
