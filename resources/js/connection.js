@@ -95,6 +95,7 @@ function sendMessageToPeer(message, appendChat) {
  * @param {String} message message to send
  */
 function sendMessageSCTP(message) {
+    if(showLogs) console.log('sending SCTP message, channel: ' + connection.channel);
     connection.send(message);
 }
 /**

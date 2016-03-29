@@ -41,7 +41,7 @@ function setSessionConstraints() {
     
     connection.channel = channel;
     
-    connection.socketCustomEvent = connection.channel;
+    connection.socketCustomEvent = channels[channelCounter];
     
     //connection.socketURL = '/';
 
@@ -52,7 +52,7 @@ function setSessionConstraints() {
         connection.attachStreams.push(new MediaStream());
     }
     else {
-        console.error('Neither Chrome nor Firefox. This demo may NOT work.');
+        console.error('Neither Chrome nor Firefox. This may NOT work.');
     }
 
     //TODO only add media that is supported by the browser
