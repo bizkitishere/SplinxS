@@ -219,7 +219,7 @@ function mapMessage(mapMessage) {
             var pos = marker.pos;
             if(id  > -1 && pos){
                 if(pos.lat && pos.lng){
-                    addMarker(id, pos);
+                    addGuidesMarker(id, pos);
                 }else{
                     if(showLogs) console.warn('invalid lcoation: ' + pos);
                 }

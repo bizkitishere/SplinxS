@@ -64,7 +64,8 @@ function addMapListeners() {
         //waits ms for marker to be placed		
         click_timeout = setTimeout(function () {
             if(showLogs) console.log('map click timeout ended');
-            addMarker(++markerCount, event.latLng);
+            //calls function in guide/tourist.map.js
+            addGuideTouristMarker(++markerCount, event.latLng);
             var data = {add: true, id: markerCount, pos: event.latLng};
             sendMapData({marker: data});
         }, click_timeoutTimer);
@@ -77,20 +78,49 @@ function addMapListeners() {
 
 }
 /**
- * adds a new marker to the map and saves it in an array
+ * adds a new marker created by the tourist to the map and saves it in an array
  * @param {int} id id of marker
  * @param {Object {double, double}} position lat lng of the marker to set
  */
-function addMarker(id, position) {
-    if(showLogs) console.log('add marker: ' + id);
+function addTouristsMarker(id, position){
+    if(showLogs) console.log('add tourist marker');
     var marker = new google.maps.Marker({
         position: position,
         map: map,
         //title: 'Hello World!',
-        id: id
+        id: id,
+        icon: 'https://maps.google.com/mapfiles/ms/icons/blue-dot.png'
     });
     
-    markerCount = id;
+    addMarker(marker);
+}
+
+/**
+ * adds a new marker created by the guide to the map and saves it in an array
+ * @param {int} id id of marker
+ * @param {Object {double, double}} position lat lng of the marker to set
+ */
+function addGuidesMarker(id, position){
+    if(showLogs) console.log('add guide marker');
+    var marker = new google.maps.Marker({
+        position: position,
+        map: map,
+        //title: 'Hello World!',
+        id: id,
+        icon: 'https://maps.google.com/mapfiles/ms/icons/green-dot.png'
+    });
+    
+    addMarker(marker);
+}
+
+/**
+ * adds a new marker to the map and saves it in an array
+ * @param {Object} marker to add
+ */
+function addMarker(marker) {
+    if(showLogs) console.log('add marker: ' + marker.id);
+    
+    markerCount = marker.id;
     
     marker.addListener('click', function (event) {
         var id = marker.id;
