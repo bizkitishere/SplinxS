@@ -58,6 +58,7 @@ function resizeMap(){
  * adds listeners on the map element
  */
 function addMapListeners() {
+    if(showLogs) console.log('add map listeners');
     //place a marker or remove it
     map.addListener('click', function (event) {
         if(showLogs) console.log('map click');
